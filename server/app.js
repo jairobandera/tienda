@@ -8,6 +8,7 @@ import { env } from './config/env.js';
 import { apiRouter } from './routes.js';
 import { errorHandler, notFoundApi } from './middleware/errors.js';
 import { UPLOADS_DIR } from './modules/uploads/uploads.routes.js';
+import { getSettings, themeCss } from './modules/settings/settings.service.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.resolve(__dirname, '..', 'public');
@@ -57,6 +58,11 @@ export function createApp() {
   });
   app.use('/api', apiRouter);
   app.use('/api', notFoundApi);
+
+  // Colores elegidos en el panel. Se revalida siempre (ETag), así un cambio se ve al recargar.
+  app.get('/theme.css', async (req, res) => {
+    res.set('Cache-Control', 'no-cache').type('text/css').send(themeCss(await getSettings()));
+  });
 
   app.use('/uploads', express.static(UPLOADS_DIR, { maxAge: '30d', immutable: true, fallthrough: false }));
   app.use(express.static(PUBLIC_DIR, { index: false, maxAge: env.isProd ? '1d' : 0 }));

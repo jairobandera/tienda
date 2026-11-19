@@ -7,7 +7,7 @@ const { settings, me } = await initLayout();
 const slug = decodeURIComponent(location.pathname.split('/').pop());
 
 function render(p) {
-  document.title = `${p.title} | Tienda Kairos`;
+  document.title = `${p.title} | ${settings.store_name}`;
   const hasDiscount = p.discountPercent > 0;
   const free = settings.free_shipping_threshold > 0 && p.finalPrice >= settings.free_shipping_threshold;
   const maxQty = Math.min(p.stock, 10);

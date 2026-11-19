@@ -1,11 +1,41 @@
 import { api } from '../core/api.js';
-import { initLayout } from '../core/layout.js';
+import { initLayout, storeNameHtml } from '../core/layout.js';
 import { $, $$, esc, money, productCard, skeletonCards, colorFor, ICONS } from '../core/utils.js';
 
 const { settings, categories } = await initLayout();
 
+const home = settings.home;
+
 $$('[data-icon]').forEach((el) => (el.innerHTML = ICONS[el.dataset.icon] || ''));
-if (settings.free_shipping_threshold > 0) $('#ship-note').textContent = `Gratis desde ${money(settings.free_shipping_threshold)}`;
+
+// ---------- Textos y secciones configurables (panel > Apariencia) ----------
+function applyHome() {
+  const slide = $('#main-slide');
+  if (!home.hero_show) slide.classList.add('hidden');
+  const title = home.hero_title
+    ? esc(home.hero_title)
+    : storeNameHtml(settings.store_name, settings.branding.highlight_last_word).replace('<span>', '<em>').replace('</span>', '</em>');
+  slide.innerHTML = `
+    ${home.hero_eyebrow ? `<span class="eyebrow">${esc(home.hero_eyebrow)}</span>` : ''}
+    <h1>${title}</h1>
+    ${home.hero_text ? `<p>${esc(home.hero_text)}</p>` : ''}
+    ${home.hero_button_text ? `<a class="btn" href="${esc(home.hero_button_link || '/buscar')}">${esc(home.hero_button_text)}</a>` : ''}`;
+
+  $$('.benefit', $('#benefits')).forEach((el, i) => {
+    const b = home.benefits[i] || {};
+    let text = b.text;
+    if (i === 1 && !text) text = settings.free_shipping_threshold > 0 ? `Gratis desde ${money(settings.free_shipping_threshold)}` : 'Rápidos y seguros';
+    $('strong', el).textContent = b.title || '';
+    $('span', el).textContent = text || '';
+  });
+  $('#benefits').classList.toggle('hidden', !home.benefits_show);
+
+  for (const [key, id] of [['offers', 'offers'], ['categories', 'cats'], ['featured', 'featured'], ['newest', 'newest']]) {
+    $(`#${id}-title`).textContent = home[`${key}_title`] || '';
+    if (!home[`${key}_show`]) $(`#${id}-section`).classList.add('hidden');
+  }
+}
+applyHome();
 
 // ---------- Banner de promociones ----------
 function countdown(endsAt) {
@@ -20,8 +50,13 @@ function countdown(endsAt) {
 
 async function loadHero() {
   const { promotions } = await api.get('/promotions/active').catch(() => ({ promotions: [] }));
-  if (!promotions.length) return;
   const slides = $('#slides');
+  // Sin banner principal y sin promociones activas no se muestra el carrusel.
+  if (!home.hero_show) $('#main-slide').outerHTML = '';
+  if (!promotions.length) {
+    if (!home.hero_show) $('#hero').classList.add('hidden');
+    return;
+  }
   slides.insertAdjacentHTML(
     'afterbegin',
     promotions
@@ -64,7 +99,7 @@ async function fill(el, params, sectionToHideIfEmpty) {
 }
 
 function renderCategories() {
-  if (!categories.length) return $('#cats-section').classList.add('hidden');
+  if (!categories.length || !home.categories_show) return $('#cats-section').classList.add('hidden');
   $('#cats').innerHTML = categories
     .map((c) => `<a class="chip-cat" href="/buscar?category=${encodeURIComponent(c.slug)}">
         <span class="circle" style="background:${colorFor(c.name)}">${esc(c.name[0])}</span>${esc(c.name)}</a>`)
@@ -74,7 +109,7 @@ function renderCategories() {
 renderCategories();
 await Promise.all([
   loadHero(),
-  fill($('#offers'), 'offers=1&sort=discount&limit=10', $('#offers-section')),
-  fill($('#featured'), 'featured=1&limit=10', $('#featured-section')),
-  fill($('#newest'), 'sort=newest&limit=10'),
+  home.offers_show && fill($('#offers'), 'offers=1&sort=discount&limit=10', $('#offers-section')),
+  home.featured_show && fill($('#featured'), 'featured=1&limit=10', $('#featured-section')),
+  home.newest_show && fill($('#newest'), 'sort=newest&limit=10'),
 ]);

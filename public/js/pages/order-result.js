@@ -78,7 +78,7 @@ function render(order) {
         ${canPay ? '<button class="btn btn-primary btn-block" id="retry">Pagar con Mercado Pago</button>' : ''}
         <div class="wa-box">
           <p><strong>Comunicate con nosotros</strong><br>Envianos el detalle de tu compra por WhatsApp para coordinar la entrega o resolver cualquier duda.</p>
-          <a class="btn btn-whatsapp" href="${esc(whatsappUrl(settings.whatsapp, order))}" target="_blank" rel="noopener">${ICONS.whatsapp} Enviar por WhatsApp</a>
+          <a class="btn btn-whatsapp" href="${esc(whatsappUrl(settings.whatsapp, order, settings.store_name))}" target="_blank" rel="noopener">${ICONS.whatsapp} Enviar por WhatsApp</a>
         </div>
         <p style="text-align:center;margin:20px 0 0"><a href="/mi-cuenta">Ver mis compras</a> · <a href="/">Seguir comprando</a></p>
       </div>

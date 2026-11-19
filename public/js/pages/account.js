@@ -40,7 +40,7 @@ async function loadOrders() {
         <div class="btns">
           <a class="btn btn-sm btn-secondary" href="/compra/${o.id}">Ver detalle</a>
           ${canPay ? `<button class="btn btn-sm btn-primary" data-pay="${o.id}">Pagar</button>` : ''}
-          <a class="btn btn-sm btn-whatsapp" href="${esc(whatsappUrl(settings.whatsapp, o))}" target="_blank" rel="noopener">${ICONS.whatsapp} WhatsApp</a>
+          <a class="btn btn-sm btn-whatsapp" href="${esc(whatsappUrl(settings.whatsapp, o, settings.store_name))}" target="_blank" rel="noopener">${ICONS.whatsapp} WhatsApp</a>
         </div>
       </article>`;
     }).join('');

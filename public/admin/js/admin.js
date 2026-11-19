@@ -2,6 +2,8 @@
 import { getMe, logout } from '../../js/core/session.js';
 import { $, $$, esc } from '../../js/core/utils.js';
 import { api } from '../../js/core/api.js';
+import { getSettings } from '../../js/core/session.js';
+import { storeNameHtml } from '../../js/core/layout.js';
 
 const ROUTES = {
   dashboard: () => import('./views/dashboard.js'),
@@ -10,6 +12,7 @@ const ROUTES = {
   categorias: () => import('./views/categories.js'),
   promociones: () => import('./views/promotions.js'),
   clientes: () => import('./views/customers.js'),
+  apariencia: () => import('./views/appearance.js'),
   configuracion: () => import('./views/settings.js'),
 };
 
@@ -19,6 +22,10 @@ else if (me.role !== 'admin') {
   document.body.innerHTML = '<div class="card empty" style="max-width:520px;margin:80px auto"><h2>No tenés acceso al panel de administración</h2><a class="btn btn-primary" href="/">Volver a la tienda</a></div>';
   throw new Error('forbidden');
 }
+
+getSettings().then((st) => {
+  $('#side-name').innerHTML = storeNameHtml(st.store_name, st.branding?.highlight_last_word !== false);
+});
 
 $('#admin-logout').addEventListener('click', (e) => {
   e.preventDefault();

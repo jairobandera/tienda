@@ -2,7 +2,7 @@ import { api, qs } from '../core/api.js';
 import { initLayout } from '../core/layout.js';
 import { $, $$, esc, productCard, skeletonCards } from '../core/utils.js';
 
-const { categories } = await initLayout();
+const { categories, settings } = await initLayout();
 
 const state = Object.fromEntries(new URLSearchParams(location.search));
 state.page = Number(state.page) || 1;
@@ -45,7 +45,7 @@ async function load() {
   const catName = categories.find((c) => c.slug === state.category)?.name;
   const title = state.q || catName || (state.offers ? 'Ofertas' : 'Productos');
   $('#s-title').textContent = title;
-  document.title = `${title} | Tienda Kairos`;
+  document.title = `${title} | ${settings.store_name}`;
   $('#results').innerHTML = skeletonCards(8);
 
   try {

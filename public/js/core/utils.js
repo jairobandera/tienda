@@ -132,10 +132,10 @@ export function addressText(o) {
 }
 
 /** Mensaje de WhatsApp con la descripción de la compra. */
-export function whatsappUrl(number, order) {
+export function whatsappUrl(number, order, storeName = 'Tienda Kairos') {
   if (!order) return `https://wa.me/${number}`;
   const lines = [
-    `¡Hola Tienda Kairos! 👋 Realicé la compra *#${order.id}*`,
+    `¡Hola ${storeName}! 👋 Realicé la compra *#${order.id}*`,
     '',
     ...order.items.map((i) => `• ${i.quantity} x ${i.title} — ${money(i.unit_price * i.quantity)}`),
     '',

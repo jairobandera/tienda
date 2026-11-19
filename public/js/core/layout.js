@@ -4,6 +4,27 @@ import { getMe, getSettings, logout } from './session.js';
 import { cartCount, onCartChange } from './cart.js';
 import { $, esc, money, debounce, ICONS, productImg, setFreeShippingThreshold } from './utils.js';
 
+/** Nombre de la tienda con la última palabra resaltada (como "Tienda <span>Kairos</span>"). */
+export function storeNameHtml(name, highlight = true) {
+  const words = String(name || '').trim().split(/\s+/);
+  if (!highlight || words.length < 2) return esc(words.join(' '));
+  const last = words.pop();
+  return `${esc(words.join(' '))} <span>${esc(last)}</span>`;
+}
+
+function logoHtml(settings) {
+  const b = settings.branding || {};
+  const name = storeNameHtml(settings.store_name, b.highlight_last_word !== false);
+  if (!b.logo_url) return name;
+  return `<img src="${esc(b.logo_url)}" alt="${esc(settings.store_name)}">${b.show_name_with_logo ? `<span class="logo-name">${name}</span>` : ''}`;
+}
+
+const SOCIAL = {
+  instagram: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
+  facebook: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M14 8h3V4h-3c-2.2 0-4 1.8-4 4v2H8v4h2v8h4v-8h3l1-4h-4V8Z"/></svg>',
+  tiktok: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M16 3c.3 2.3 1.7 3.8 4 4v3.2a7 7 0 0 1-4-1.3V15a6 6 0 1 1-6-6v3.3A2.7 2.7 0 1 0 12.7 15V3H16Z"/></svg>',
+};
+
 function headerHtml(settings, me, categories) {
   const q = new URLSearchParams(location.search).get('q') || '';
   const user = me
@@ -21,7 +42,7 @@ function headerHtml(settings, me, categories) {
   return `
     ${settings.announcement ? `<div class="announcement">${esc(settings.announcement)}</div>` : ''}
     <div class="container header-main">
-      <a href="/" class="logo" aria-label="Tienda Kairos, inicio">Tienda <span>Kairos</span></a>
+      <a href="/" class="logo" aria-label="${esc(settings.store_name)}, inicio">${logoHtml(settings)}</a>
       <form class="search" id="search-form" role="search" action="/buscar">
         <input name="q" id="search-input" type="search" placeholder="Buscar productos, marcas y más…" value="${esc(q)}" autocomplete="off" aria-label="Buscar">
         <button type="submit" aria-label="Buscar">${ICONS.search}</button>
@@ -42,11 +63,17 @@ function headerHtml(settings, me, categories) {
 
 function footerHtml(settings) {
   const year = new Date().getFullYear();
+  const f = settings.footer || {};
+  const social = Object.keys(SOCIAL)
+    .filter((k) => f[k])
+    .map((k) => `<a href="${esc(f[k])}" target="_blank" rel="noopener" aria-label="${k}">${SOCIAL[k]}</a>`)
+    .join('');
   return `
     <div class="container footer-grid">
       <div>
-        <h4>Tienda Kairos</h4>
-        <p>Productos seleccionados con envío a todo Uruguay. Pagá de forma segura con Mercado Pago: tarjetas de crédito, débito o efectivo.</p>
+        <h4>${esc(settings.store_name)}</h4>
+        ${f.about ? `<p>${esc(f.about)}</p>` : ''}
+        ${social ? `<div class="footer-social">${social}</div>` : ''}
       </div>
       <div>
         <h4>Ayuda</h4>
@@ -60,7 +87,7 @@ function footerHtml(settings) {
         <a href="/buscar?sort=newest">Novedades</a>
       </div>
     </div>
-    <div class="footer-bottom">© ${year} Tienda Kairos · Todos los derechos reservados</div>`;
+    <div class="footer-bottom">${esc(f.copyright || `© ${year} ${settings.store_name} · Todos los derechos reservados`)}</div>`;
 }
 
 function setupSearch() {
@@ -124,6 +151,21 @@ function updateBadge(n) {
   b.classList.toggle('hidden', !n);
 }
 
+/** Nombre de la tienda en el título de la pestaña, color del navegador y logo como ícono. */
+function applyBranding(settings) {
+  const name = settings.store_name || 'Tienda Kairos';
+  if (name !== 'Tienda Kairos') document.title = document.title.replace('Tienda Kairos', name);
+  const tc = document.querySelector('meta[name="theme-color"]');
+  if (tc && settings.theme?.header_bg) tc.content = settings.theme.header_bg;
+  if (settings.branding?.logo_url) {
+    const icon = document.querySelector('link[rel="icon"]');
+    if (icon) {
+      icon.href = settings.branding.logo_url;
+      icon.removeAttribute('type');
+    }
+  }
+}
+
 /** Inicializa el layout. Devuelve { me, settings } para la página. */
 export async function initLayout() {
   const headerEl = document.createElement('header');
@@ -136,6 +178,7 @@ export async function initLayout() {
     api.get('/categories').catch(() => ({ categories: [] })),
   ]);
   setFreeShippingThreshold(settings.free_shipping_threshold);
+  applyBranding(settings);
 
   headerEl.innerHTML = headerHtml(settings, me, cats.categories);
   const footer = document.createElement('footer');
@@ -143,6 +186,7 @@ export async function initLayout() {
   footer.innerHTML = footerHtml(settings);
   document.body.append(footer);
 
+  if (settings.home?.whatsapp_float !== false) {
   const wa = document.createElement('a');
   wa.className = 'wa-float';
   wa.href = `https://wa.me/${settings.whatsapp}`;
@@ -151,6 +195,7 @@ export async function initLayout() {
   wa.setAttribute('aria-label', 'Escribinos por WhatsApp');
   wa.innerHTML = ICONS.whatsapp;
   document.body.append(wa);
+  }
 
   setupSearch();
   setupUserMenu();
