@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Administración | Tienda Kairos</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+  <script type="module" src="/admin/js/admin.js"></script>
+</head>
+<body class="admin">
+  <div class="admin-shell">
+    <aside class="admin-side" id="side">
+      <a href="/" class="logo">Tienda <span>Kairos</span><small>Administración</small></a>
+      <nav id="admin-nav">
+        <a href="#/dashboard" data-route="dashboard">Resumen</a>
+        <a href="#/pedidos" data-route="pedidos">Pedidos <span class="count hidden" id="to-ship-count"></span></a>
+        <a href="#/productos" data-route="productos">Productos</a>
+        <a href="#/categorias" data-route="categorias">Categorías</a>
+        <a href="#/promociones" data-route="promociones">Ofertas y descuentos</a>
+        <a href="#/clientes" data-route="clientes">Clientes</a>
+        <a href="#/configuracion" data-route="configuracion">Configuración</a>
+        <div class="bottom">
+          <a href="/" target="_blank" rel="noopener">Ver tienda ↗</a>
+          <a href="#" id="admin-logout">Cerrar sesión</a>
+        </div>
+      </nav>
+    </aside>
+    <main class="admin-main">
+      <div class="admin-top">
+        <div style="display:flex;gap:12px;align-items:center">
+          <button class="menu-btn" id="menu-btn" type="button" aria-label="Menú">☰</button>
+          <h1 id="view-title">Resumen</h1>
+        </div>
+        <div class="actions" id="view-actions"></div>
+      </div>
+      <div id="view"><div class="spinner"></div></div>
+    </main>
+  </div>
+</body>
+</html>

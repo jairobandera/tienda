@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi cuenta | Tienda Kairos</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script type="module" src="/js/pages/account.js"></script>
+</head>
+<body>
+  <main class="container account">
+    <nav class="card side-nav" aria-label="Mi cuenta">
+      <button type="button" data-tab="compras" class="on">Mis compras</button>
+      <button type="button" data-tab="datos">Mis datos</button>
+    </nav>
+    <section>
+      <div id="tab-compras" class="card"><div class="spinner"></div></div>
+      <div id="tab-datos" class="hidden">
+        <div class="card card-pad" style="margin-bottom:16px">
+          <h2 class="step-title">Datos personales</h2>
+          <div class="alert hidden" id="profile-msg"></div>
+          <form id="profile-form" class="form-grid" novalidate>
+            <div class="field"><label for="p-name">Nombre</label><input id="p-name" name="name" required></div>
+            <div class="field"><label for="p-phone">Celular</label><input id="p-phone" name="phone" type="tel"></div>
+            <div class="field full"><label>Email</label><input id="p-email" disabled></div>
+            <div><button class="btn btn-primary" type="submit">Guardar cambios</button></div>
+          </form>
+        </div>
+        <div class="card card-pad">
+          <h2 class="step-title">Cambiar contraseña</h2>
+          <div class="alert hidden" id="pass-msg"></div>
+          <form id="pass-form" class="form-grid" novalidate>
+            <div class="field"><label for="cur">Contraseña actual</label><input id="cur" name="currentPassword" type="password" autocomplete="current-password" required></div>
+            <div class="field"><label for="new">Nueva contraseña</label><input id="new" name="newPassword" type="password" autocomplete="new-password" minlength="8" required></div>
+            <div><button class="btn btn-secondary" type="submit">Actualizar contraseña</button></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

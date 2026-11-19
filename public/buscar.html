@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Buscar | Tienda Kairos</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script type="module" src="/js/pages/search.js"></script>
+</head>
+<body>
+  <main class="container search-layout">
+    <aside class="filters" id="filters">
+      <h1 id="s-title">Productos</h1>
+      <p class="muted small" id="s-count"></p>
+      <label class="small" style="display:flex;gap:8px;align-items:center;margin-top:12px">
+        <input type="checkbox" id="f-offers"> Solo ofertas
+      </label>
+      <label class="small" style="display:flex;gap:8px;align-items:center;margin-top:8px">
+        <input type="checkbox" id="f-stock"> Solo con stock
+      </label>
+      <h3>Categorías</h3>
+      <ul id="f-cats"></ul>
+      <h3>Precio</h3>
+      <form class="price-inputs" id="f-price">
+        <input type="number" min="0" id="f-min" placeholder="Mínimo" aria-label="Precio mínimo">
+        <span>-</span>
+        <input type="number" min="0" id="f-max" placeholder="Máximo" aria-label="Precio máximo">
+        <button class="btn btn-secondary btn-sm" type="submit" aria-label="Aplicar precio">›</button>
+      </form>
+    </aside>
+    <section>
+      <div class="toolbar">
+        <button type="button" class="btn btn-ghost btn-sm filters-toggle" id="toggle-filters">Filtrar</button>
+        <label>Ordenar por
+          <select id="sort">
+            <option value="relevance">Más relevantes</option>
+            <option value="price_asc">Menor precio</option>
+            <option value="price_desc">Mayor precio</option>
+            <option value="discount">Mayor descuento</option>
+            <option value="best_sellers">Más vendidos</option>
+            <option value="newest">Más nuevos</option>
+          </select>
+        </label>
+      </div>
+      <div class="grid" id="results"></div>
+      <div class="pagination" id="pagination"></div>
+    </section>
+  </main>
+</body>
+</html>

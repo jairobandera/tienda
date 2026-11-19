@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Finalizar compra | Tienda Kairos</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script type="module" src="/js/pages/checkout.js"></script>
+</head>
+<body>
+  <main class="container">
+    <form class="two-col" id="checkout" novalidate>
+      <div>
+        <div class="alert alert-error hidden" id="error" role="alert"></div>
+
+        <div class="card card-pad" style="margin-bottom:16px">
+          <h2 class="step-title">1. ¿Cómo querés recibir tu compra?</h2>
+          <label class="option"><input type="radio" name="shippingMethod" value="delivery" checked>
+            <div><strong>Envío a domicilio</strong><span class="muted">A todo Uruguay</span></div><span class="right" id="ship-price"></span></label>
+          <label class="option hidden" id="pickup-opt"><input type="radio" name="shippingMethod" value="pickup">
+            <div><strong>Retiro</strong><span class="muted" id="pickup-address"></span></div><span class="right green" style="color:var(--success)">Gratis</span></label>
+        </div>
+
+        <div class="card card-pad" style="margin-bottom:16px">
+          <h2 class="step-title">2. Datos de contacto y entrega</h2>
+          <div class="form-grid">
+            <div class="field"><label for="name">Nombre de quien recibe</label><input id="name" name="name" autocomplete="name" required></div>
+            <div class="field"><label for="phone">Celular</label><input id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="09X XXX XXX"></div>
+          </div>
+          <div id="address-fields">
+            <div class="form-grid">
+              <div class="field"><label for="street">Calle</label><input id="street" name="street" autocomplete="address-line1" required></div>
+              <div class="form-grid" style="gap:0 12px">
+                <div class="field"><label for="number">Número</label><input id="number" name="number"></div>
+                <div class="field"><label for="apartment">Apto</label><input id="apartment" name="apartment" autocomplete="address-line2"></div>
+              </div>
+              <div class="field"><label for="department">Departamento</label>
+                <select id="department" name="department" required></select></div>
+              <div class="field"><label for="city">Ciudad / Barrio</label><input id="city" name="city" autocomplete="address-level2" required></div>
+              <div class="field"><label for="postalCode">Código postal (opcional)</label><input id="postalCode" name="postalCode" autocomplete="postal-code"></div>
+              <div class="field"><label for="addrNotes">Indicaciones (opcional)</label><input id="addrNotes" name="addrNotes" placeholder="Entre calles, timbre, horario…"></div>
+            </div>
+            <label class="small" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="saveAddress" checked> Guardar esta dirección para próximas compras</label>
+          </div>
+        </div>
+
+        <div class="card card-pad">
+          <h2 class="step-title">3. Forma de pago</h2>
+          <label class="option"><input type="radio" name="paymentMethod" value="mercadopago" checked>
+            <div><strong>Mercado Pago</strong>
+              <span class="muted">Tarjetas de crédito (hasta <span id="max-inst">12</span> cuotas), débito, efectivo en Abitab / RedPagos o dinero en cuenta.</span>
+              <div class="pay-logos"><span>VISA</span><span>MASTER</span><span>OCA</span><span>DÉBITO</span><span>ABITAB</span><span>REDPAGOS</span></div>
+            </div></label>
+          <label class="option hidden" id="cash-opt"><input type="radio" name="paymentMethod" value="cash">
+            <div><strong>Efectivo o transferencia</strong><span class="muted">Reservás el pedido y coordinás el pago por WhatsApp.</span></div></label>
+          <div class="field" style="margin:12px 0 0"><label for="notes">Comentarios para el vendedor (opcional)</label><textarea id="notes" name="notes" rows="2" maxlength="500"></textarea></div>
+        </div>
+      </div>
+
+      <aside class="card summary" id="summary"><div class="spinner"></div></aside>
+    </form>
+  </main>
+</body>
+</html>

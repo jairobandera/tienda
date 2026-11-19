@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tienda Kairos | Comprá online con envío a todo Uruguay</title>
+  <meta name="description" content="Tienda Kairos: ofertas, envíos a todo Uruguay y pagos seguros con Mercado Pago.">
+  <meta name="theme-color" content="#0e1e45">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script type="module" src="/js/pages/home.js"></script>
+</head>
+<body>
+  <main>
+    <section class="container" style="padding:0">
+      <div class="hero" id="hero">
+        <div class="slides" id="slides">
+          <div class="slide">
+            <span class="eyebrow">Bienvenido a</span>
+            <h1>Tienda <em>Kairos</em></h1>
+            <p>El momento justo para comprar lo que querés. Envíos a todo Uruguay y pagos seguros.</p>
+            <a class="btn" href="/buscar">Ver productos</a>
+          </div>
+        </div>
+        <div class="dots" id="dots"></div>
+      </div>
+    </section>
+
+    <div class="container">
+      <div class="card benefits">
+        <div class="benefit"><div class="ico" data-icon="card"></div><div><strong>Pagá como quieras</strong><span>Tarjetas, débito o efectivo</span></div></div>
+        <div class="benefit"><div class="ico" data-icon="truck"></div><div><strong>Envíos a todo el país</strong><span id="ship-note">Rápidos y seguros</span></div></div>
+        <div class="benefit"><div class="ico" data-icon="shield"></div><div><strong>Compra protegida</strong><span>Con Mercado Pago</span></div></div>
+        <div class="benefit"><div class="ico" data-icon="whatsapp"></div><div><strong>Atención directa</strong><span>Por WhatsApp</span></div></div>
+      </div>
+
+      <section class="section" id="offers-section">
+        <div class="section-head"><h2>Ofertas</h2><a href="/buscar?offers=1">Ver todas</a></div>
+        <div class="scroller" id="offers"></div>
+      </section>
+
+      <section class="section" id="cats-section">
+        <div class="section-head"><h2>Categorías</h2></div>
+        <div class="chips" id="cats"></div>
+      </section>
+
+      <section class="section" id="featured-section">
+        <div class="section-head"><h2>Destacados</h2><a href="/buscar?featured=1">Ver todos</a></div>
+        <div class="grid" id="featured"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head"><h2>Recién llegados</h2><a href="/buscar?sort=newest">Ver más</a></div>
+        <div class="grid" id="newest"></div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

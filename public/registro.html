@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crear cuenta | Tienda Kairos</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script type="module" src="/js/pages/auth.js"></script>
+</head>
+<body>
+  <main class="auth-wrap">
+    <div class="card card-pad">
+      <h1>Creá tu cuenta</h1>
+      <div class="alert alert-error hidden" id="error" role="alert"></div>
+      <form id="login-form" data-mode="register" novalidate>
+        <div class="field"><label for="name">Nombre y apellido</label><input id="name" name="name" autocomplete="name" required></div>
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="phone">Celular</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="09X XXX XXX"><span class="hint">Lo usamos para coordinar la entrega.</span></div>
+        <div class="field"><label for="password">Contraseña</label><input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required><span class="hint">Mínimo 8 caracteres.</span></div>
+        <button class="btn btn-primary btn-block" type="submit">Crear cuenta</button>
+      </form>
+      <p class="switch">¿Ya tenés cuenta? <a href="/ingresar" id="to-login">Ingresá</a></p>
+    </div>
+  </main>
+</body>
+</html>
