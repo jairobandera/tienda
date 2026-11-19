@@ -53,7 +53,7 @@ function renderSummary() {
   $('#address-fields').classList.toggle('hidden', method() === 'pickup');
   const isCash = payment() === 'cash';
   $('#summary').innerHTML = `
-    <h2>Resumen de compra</h2>
+    <h2>Tu pedido</h2>
     <ul class="order-lines">
       ${items.map((i) => `<li><span style="width:40px;height:40px;display:grid;place-items:center">${productImg(i.product)}</span>
         <span>${esc(i.product.title)} <span class="q">x${i.quantity}</span></span>

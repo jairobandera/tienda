@@ -22,8 +22,11 @@ function render({ items, totals }) {
     <div class="two-col">
       <div class="card">
         <div class="card-pad" style="padding-bottom:12px;border-bottom:1px solid var(--border)">
-          <h2 style="font-size:18px;margin:0">Productos (${totals.count})</h2>
-          ${threshold > 0 ? `<p class="small ${missing <= 0 ? 'free-ship' : 'muted'}" style="margin:6px 0 0">${missing <= 0 ? '¡Tenés envío gratis!' : `Te faltan ${money(missing)} para tener envío gratis`}</p>` : ''}
+          <h2 style="font-size:18px;margin:0">Tu carrito <span class="muted" style="font-weight:400">· ${totals.count} ${totals.count === 1 ? 'producto' : 'productos'}</span></h2>
+          ${threshold > 0 ? `<div class="ship-progress ${missing <= 0 ? 'done' : ''}">
+            <div class="bar"><span style="width:${Math.min(100, Math.round((totals.total / threshold) * 100))}%"></span></div>
+            <p class="small">${missing <= 0 ? '🎉 ¡Tu envío es gratis!' : `Sumá ${money(missing)} más y el envío es gratis`}</p>
+          </div>` : ''}
         </div>
         ${items.map((i) => {
           const p = i.product;
@@ -33,7 +36,7 @@ function render({ items, totals }) {
             <div>
               <a class="t" href="/p/${encodeURIComponent(p.slug)}">${esc(p.title)}</a>
               ${!i.available ? '<div class="out-of-stock">Sin stock — no se incluirá en la compra</div>' : `<div class="muted small">${p.stock} disponibles</div>`}
-              <div class="actions"><button type="button" data-remove>Eliminar</button></div>
+              <div class="actions"><button type="button" data-remove>Quitar</button></div>
             </div>
             <div class="stepper">
               <button type="button" data-step="-1" ${i.quantity <= 1 ? 'disabled' : ''} aria-label="Restar">−</button>
@@ -48,12 +51,14 @@ function render({ items, totals }) {
         }).join('')}
       </div>
       <aside class="card summary">
-        <h2>Resumen de compra</h2>
-        <div class="row"><span>Productos (${totals.count})</span><span>${money(totals.subtotal)}</span></div>
+        <h2>Tu pedido</h2>
+        <div class="row"><span>Subtotal</span><span>${money(totals.subtotal)}</span></div>
         ${totals.discount > 0 ? `<div class="row green"><span>Descuentos</span><span>− ${money(totals.discount)}</span></div>` : ''}
         <div class="row"><span>Envío</span><span class="${shipping ? '' : 'green'}">${shipping ? money(shipping) : 'Gratis'}</span></div>
         <div class="row total"><span>Total</span><span>${money(totals.total + shipping)}</span></div>
-        <button class="btn btn-primary btn-block" id="go-checkout" type="button" ${totals.count ? '' : 'disabled'}>Continuar compra</button>
+        <button class="btn btn-primary btn-block" id="go-checkout" type="button" ${totals.count ? '' : 'disabled'}>Ir a pagar →</button>
+        <a class="btn btn-ghost btn-block" href="/" style="margin-top:6px">Seguir comprando</a>
+        <p class="safe small">🔒 Pago seguro con Mercado Pago</p>
         ${!me ? '<p class="muted small" style="text-align:center;margin-bottom:0">Vas a necesitar iniciar sesión para comprar.</p>' : ''}
       </aside>
     </div>`;

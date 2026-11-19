@@ -15,7 +15,7 @@ export const DEFAULT_THEME = {
   hero_text: '#ffffff',
   promo_from: '#0b0b0f',
   promo_to: '#3b2a00',
-  page_bg: '#ededed',
+  page_bg: '#f3f4f7',
   footer_bg: '#ffffff',
   footer_text: '#6b7280',
   radius: 8,

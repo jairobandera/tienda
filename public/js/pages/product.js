@@ -25,12 +25,14 @@ function render(p) {
         <div class="main-img" id="main-img">${images[0] ? `<img src="${esc(images[0])}" alt="${esc(p.title)}">` : placeholder(p.title)}</div>
       </div>
       <div class="buy-box">
-        <div class="meta">${p.condition === 'usado' ? 'Usado' : 'Nuevo'}${p.soldCount ? ` | +${p.soldCount} vendidos` : ''}</div>
+        <div class="meta"><span class="chip">${p.condition === 'usado' ? 'Usado' : 'Nuevo'}</span>${p.soldCount ? `<span class="chip">${p.soldCount} vendidos</span>` : ''}</div>
         ${p.promoName ? `<span class="promo-pill">${esc(p.promoName)}</span>` : ''}
         <h1>${esc(p.title)}</h1>
-        ${hasDiscount ? `<div class="old">${money(p.price)}</div>` : ''}
-        <div class="price-row"><span class="price">${priceHtml(p.finalPrice)}</span>${hasDiscount ? `<span class="off" style="font-size:18px">${Math.round(p.discountPercent)}% OFF</span>` : ''}</div>
-        <div class="installments">Pagá en hasta ${installments} cuotas con Mercado Pago</div>
+        <div class="price-box">
+          <div class="price-row"><span class="price">${priceHtml(p.finalPrice)}</span>${hasDiscount ? `<span class="disc">-${Math.round(p.discountPercent)}%</span>` : ''}</div>
+          ${hasDiscount ? `<div class="old">Antes ${money(p.price)} · ahorrás ${money(p.price - p.finalPrice)}</div>` : ''}
+          <div class="installments">${ICONS.card} Hasta ${installments} cuotas con Mercado Pago</div>
+        </div>
         ${free ? `<div class="free-ship" style="font-size:15px">${ICONS.truck} Envío gratis a todo el país</div>` : `<div class="muted small">Envío a todo Uruguay: ${money(settings.shipping_cost)}${settings.free_shipping_threshold > 0 ? ` · gratis desde ${money(settings.free_shipping_threshold)}` : ''}</div>`}
         ${settings.pickup_enabled ? '<div class="muted small" style="margin-top:4px">También podés retirarlo sin costo.</div>' : ''}
         ${p.stock > 0
@@ -39,7 +41,7 @@ function render(p) {
                <select id="qty">${Array.from({ length: maxQty }, (_, i) => `<option value="${i + 1}">${i + 1} ${i ? 'unidades' : 'unidad'}</option>`).join('')}</select>
                <span class="muted">(${p.stock} disponible${p.stock === 1 ? '' : 's'})</span></div>
              <button class="btn btn-primary" id="buy-now" type="button">Comprar ahora</button>
-             <button class="btn btn-secondary" id="add-cart" type="button">Agregar al carrito</button>`
+             <button class="btn btn-outline" id="add-cart" type="button">${ICONS.cart} Sumar al carrito</button>`
           : `<div class="stock out-of-stock">Sin stock por el momento</div>
              <a class="btn btn-secondary" href="https://wa.me/${esc(settings.whatsapp)}?text=${encodeURIComponent(`Hola! Quería consultar por "${p.title}"`)}" target="_blank" rel="noopener">Consultar por WhatsApp</a>`}
         <div class="trust">

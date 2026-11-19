@@ -72,15 +72,16 @@ export function productCard(p) {
   return `
     <a class="p-card" href="/p/${encodeURIComponent(p.slug)}">
       ${p.promoName ? `<span class="tag">${esc(p.promoName)}</span>` : ''}
+      ${hasDiscount ? `<span class="disc">-${Math.round(p.discountPercent)}%</span>` : ''}
       <div class="img">${productImg(p)}</div>
       <div class="body">
-        <span class="old">${hasDiscount ? money(p.price) : ''}</span>
+        <span class="title">${esc(p.title)}</span>
         <div class="price-row">
           <span class="price">${priceHtml(p.finalPrice)}</span>
-          ${hasDiscount ? `<span class="off">${Math.round(p.discountPercent)}% OFF</span>` : ''}
+          ${hasDiscount ? `<span class="old">${money(p.price)}</span>` : ''}
         </div>
-        ${p.stock < 1 ? '<span class="out-of-stock">Sin stock</span>' : free ? '<span class="free-ship">Envío gratis</span>' : ''}
-        <span class="title">${esc(p.title)}</span>
+        ${p.stock < 1 ? '<span class="out-of-stock">Sin stock</span>' : free ? `<span class="free-ship">${ICONS.truck} Envío gratis</span>` : ''}
+        <span class="see">Ver producto →</span>
       </div>
     </a>`;
 }
